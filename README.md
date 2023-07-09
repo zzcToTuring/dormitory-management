@@ -73,6 +73,8 @@
 
   ps:我也是程序猿，日常板砖ing，看到就回，有时候忘了在发一次就好
   
+  ps:和其他专门做这种的工作室比不了，只是一个23届毕业生把自己的毕业设计上传上来而已
+  
   ![image](https://github.com/zzcToTuring/dormitory-management/assets/94695853/9424dc4b-8015-4a23-b40f-2a80dcc859ca)
   
 

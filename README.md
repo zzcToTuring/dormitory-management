@@ -76,7 +76,14 @@
   ![image](https://github.com/zzcToTuring/dormitory-management/assets/94695853/9424dc4b-8015-4a23-b40f-2a80dcc859ca)
   
 
-  
+  ## 文件说明
+   1、前后端文件。项目的源代码
+   
+   2、.mind文件。画流程图专用，请使用xmind打开
+   
+   3、任务书、开题报告、答辩PPT、论文最终稿等。使用wps打开
+   
+   4、.sql文件。数据库相关配置
 
   
   

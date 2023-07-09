@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzc.community.mapper.ResidentInFoMapper">
+
+
+    <select id="findAll" resultMap="resInfoMap">
+        SELECT * from tb_resident_info
+        LEFT JOIN tb_address
+        on tb_resident_info.res_address_id = tb_address.address_id
+        <where>
+            <if test="resName != null and resName != ''">
+                res_name = #{resName}
+            </if>
+            <if test="name != null and name != ''">
+               and `name` = #{name}
+            </if>
+            <if test="house != null">
+               and house = #{house}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addResidentInFo" useGeneratedKeys="true">
+        insert into
+        tb_resident_info
+        (res_name,res_phone,res_state,res_address_id,info_remark)
+        values
+        (#{resName},#{resPhone},#{resState},#{resAddressId},#{infoRemark})
+    </insert>
+
+    <update id="updateResInfo">
+       UPDATE tb_resident_info
+       set info_status = #{infoStatus}
+       where res_info_id = #{resInfoId}
+    </update>
+
+    <update id="upBatchRes">
+        <foreach collection="ids" item="item" index="index" open="" close="" separator=";">
+            update tb_resident_info
+            set info_status = #{infoStatus}
+            where res_info_id = #{item.value}
+        </foreach>
+    </update>
+
+    <delete id="deleteByResInfoIdInt">
+        <foreach collection="ids" item="item" index="index" open="" close="" separator=";">
+            delete from tb_resident_info
+            where res_info_id = #{item.value}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzc.community.mapper.VisitorMapper">
+
+    <select id="findAll" resultMap="visMapper">
+        SELECT * FROM tb_visitor
+        LEFT JOIN tb_address
+        ON tb_visitor.address_id = tb_address.address_id
+        <where>
+            <if test=" visName != null and visName != ''"> vis_name = #{visName}</if>
+        </where>
+    </select>
+
+    <insert id="save"  useGeneratedKeys="true" >
+        insert  into tb_visitor (address_id,vis_name,vis_phone,vis_remark,vis_address)
+         values (#{???},#{???},#{???},#{visRemark},#{visAddress})
+    </insert>
+
+    <update id="upBatchVis">
+        <foreach collection="ids" item="item" index="index" open="" close="" separator=";">
+            update tb_visitor
+            set vis_status = #{visStatus}
+            where visitor_id = #{item.value}
+        </foreach>
+    </update>
+
+    <delete id="deleteByVisitorIdInt">
+        <foreach collection="ids" item="item" index="index" open="" close="" separator=";">
+            delete from tb_visitor
+            where visitor_id = #{item.value}
+        </foreach>
+    </delete>
+
+</mapper>

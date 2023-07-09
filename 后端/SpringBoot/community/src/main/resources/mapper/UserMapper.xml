@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzc.community.mapper.UserMapper">
+    
+    <insert id="save" parameterType="com.zzc.community.po.User" useGeneratedKeys="true" keyProperty="userId">
+        insert into tb_user (user_id,account,user_name,user_phone)
+        values (#{userId},#{account},#{userName},#{userPhone})
+    </insert>
+
+    <select id="findByAccount" parameterType="string" resultType="com.zzc.community.po.User">
+        select tb_user.*,tb_code.code_text from tb_user,tb_code
+        where tb_code.user_id = tb_user.user_id
+        and tb_user.account = #{account}
+    </select>
+
+    <select id="findUserByAccount" resultMap="userMap">
+         select u.*,r.role_id,r.role_name
+        from tb_user u LEFT JOIN tb_user_role ur
+        on u.user_id = ur.user_id
+        LEFT JOIN tb_role r
+        on ur.role_id = r.role_id
+        WHERE u.account = #{account}
+    </select>
+
+
+    <select id="findMenuByRoleId" resultType="com.zzc.community.po.Menu">
+        SELECT tb_menu.*,tb_role.role_name from tb_menu
+        LEFT JOIN tb_role_menu
+        on tb_menu.menu_id = tb_role_menu.menu_id
+        LEFT JOIN tb_role
+        on tb_role_menu.role_id = tb_role.role_id
+        WHERE tb_role.role_id = #{roleId}
+    </select>
+
+
+
+    <select id="selectAll" resultMap="userMap">
+        select tb_user.*,tb_role.* from tb_user LEFT JOIN tb_user_role
+        on tb_user.user_id = tb_user_role.user_id
+        LEFT JOIN tb_role on
+        tb_role.role_id = tb_user_role.role_id
+    </select>
+
+    <update id="deleteUpdate" >
+        UPDATE tb_user set `status` = #{status} where user_id = #{userId}
+    </update>
+
+    <select id="findByUserId" resultMap="userMap">
+        select * from tb_user WHERE user_id = #{userId}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM tb_user where user_id = #{userId}
+    </delete>
+
+     <select id="findByAccountMenus" resultMap="userMapMenu">
+        SELECT *
+		from tb_menu
+        LEFT JOIN tb_role_menu
+        on tb_menu.menu_id = tb_role_menu.menu_id
+        LEFT JOIN tb_role
+        on tb_role_menu.role_id = tb_role.role_id
+		LEFT JOIN tb_user_role
+		on tb_user_role.role_id = tb_role_menu.role_id
+		LEFT JOIN tb_user
+		on tb_user.user_id = tb_user_role.user_id
+		where tb_user.account = #{account}
+
+     </select>
+
+    <update id="updatePasswordByAccount">
+        UPDATE tb_user
+        set `password` = #{password}
+        where account = #{account}
+    </update>
+
+    <update id="updateUser">
+        update tb_user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userPhone != null and userPhone != ''">
+                user_phone = #{userPhone},
+            </if>
+            <if test="head != null and head!= ''">
+                head = #{head},
+            </if>
+            <if test="userEmail != null and userEmail != ''">
+                user_email =#{userEmail},
+            </if>
+            <if test="userAddress != null and userAddress != ''">
+                user_address = #{userAddress}
+            </if>
+        </set>
+    </update>
+
+</mapper>

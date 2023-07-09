@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzc.community.mapper.CodeMapper">
+    <resultMap id="codeMapper" type="com.zzc.community.po.Code">
+        <id column="code_id" property="codeId"></id>
+        <result column="role_id" property="roleId"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="role_name" property="roleName"></result>
+        <result column="account" property="account"></result>
+    </resultMap>
+    <insert id="save"  useGeneratedKeys="true">
+        insert into tb_code (role_id,code_text)
+        values (#{roleId},#{codeText})
+    </insert>
+
+
+    <select id="selectAll" resultMap="codeMapper">
+        select tb_code.*,tb_role.role_name,tb_user.user_name,tb_user.account from tb_code LEFT JOIN
+        tb_role on tb_code.role_id = tb_role. role_id
+		LEFT JOIN tb_user on tb_user.user_id = tb_code.user_id
+    </select>
+
+    <select id="findAll" resultMap="codeMapper">
+        select tb_code.*,tb_role.role_name,tb_user.user_name,tb_user.account from tb_code RIGHT JOIN
+        tb_role on tb_code.role_id = tb_role. role_id
+        RIGHT JOIN tb_user on tb_user.user_id = tb_code.user_id
+    </select>
+
+    <update id="updateCode">
+        update tb_code set `status` = #{status} where code_id = #{codeId}
+    </update>
+
+    <select id="selectByCodeId" resultMap="codeMapper">
+        select * from tb_code where code_id = #{codeId}
+    </select>
+
+    <delete id="deleteByCodeId">
+        delete from tb_code where code_id = #{codeId}
+    </delete>
+
+    <select id="selectBycodeText" resultType="com.zzc.community.po.Code">
+        select * from tb_code
+        where code_text = #{codeText}
+    </select>
+
+   <update id="updateByUser">
+    UPDATE  tb_code set user_id = #{userId} ,`status` = 1 where code_text = #{codeText}
+   </update>
+
+    <select id="selectByUserId" resultMap="codeMapper">
+        select * from tb_code where user_id =#{userId}
+    </select>
+
+    <delete id="deleteByCodeIdInt">
+        delete from tb_code where code_id = #{codeId}
+    </delete>
+</mapper>

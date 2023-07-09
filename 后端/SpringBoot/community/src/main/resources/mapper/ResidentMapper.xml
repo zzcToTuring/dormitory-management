@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzc.community.mapper.ResidentMapper">
+
+    <resultMap id="resMapper" type="com.zzc.community.po.Resident">
+        <id column="res_id" property="resId"></id>
+        <result column="res_name" property="resName"></result>
+        <result column="res_sex" property="resSex"></result>
+        <result column="res_phone" property="resPhone"></result>
+        <result column="res_intotime" property="resIntotime"></result>
+        <result column="res_remarks" property="resRemarks"></result>
+        <result column="res_state" property="resState"></result>
+        <result column="res_status" property="resStatus"></result>
+        <result column="name" property="name"></result>
+        <result column="house" property="house"></result>
+        <result column="unit" property="unit"></result>
+
+    </resultMap>
+
+    <select id="findAll" resultMap="resMapper">
+        SELECT tb_resident.*,tb_address.house,tb_address.resident_count,tb_address.unit,tb_address.`name` from tb_resident LEFT JOIN tb_address_resident
+        on tb_resident.res_id = tb_address_resident.res_id
+        LEFT JOIN tb_address
+        on tb_address.address_id = tb_address_resident.address_id
+    </select>
+
+    <select id="selectAll" resultMap="resMapper">
+        SELECT tb_resident.*,tb_address.house,tb_address.resident_count,tb_address.unit,tb_address.`name`
+        from tb_resident LEFT JOIN tb_address_resident
+        on tb_resident.res_id = tb_address_resident.res_id
+        LEFT JOIN tb_address
+        on tb_address.address_id = tb_address_resident.address_id
+        <where>
+            <if test="resName != null and resName != ''">  res_name like concat('%',#{resName},'%')</if>
+            <if test="house != null and house != ''"> and house = #{house}</if>
+            <if test="unit != null and unit != ''"> and unit = #{unit}</if>
+        </where>
+    </select>
+
+
+    <insert id="addResident" useGeneratedKeys="true" keyColumn="res_id" keyProperty="resId">
+        insert  into tb_resident(res_id,res_name,res_sex,
+        res_phone,res_remarks,res_state)
+        values ( #{resId},#{resName}, #{resSex},#{resPhone},
+        #{resRemarks},#{resState})
+    </insert>
+
+    <select id="findByresName" resultMap="resMapper">
+        select * from tb_resident where res_name = #{resName}
+    </select>
+
+    <select id="selectByResState" resultMap="resMapper">
+        SELECT tb_resident.*,tb_address.house,tb_address.resident_count,tb_address.unit,tb_address.`name`
+        from tb_resident LEFT JOIN tb_address_resident
+        on tb_resident.res_id = tb_address_resident.res_id
+        LEFT JOIN tb_address
+        on tb_address.address_id = tb_address_resident.address_id
+        where res_state != #{resState}
+    </select>
+
+    <update id="updateResident">
+        update tb_resident
+        <set>
+            <if test="resName != null and resName != ''">
+                res_name = #{resName},
+            </if>
+
+            <if test="resSex != null">
+                res_sex = #{resSex},
+            </if>
+
+            <if test="resPhone != null and resPhone != ''">
+                res_phone = #{resPhone},
+            </if>
+
+            <if test="resState != null">
+                res_state = #{resState},
+            </if>
+
+            <if test="resRemarks != null and resRemarks != ''">
+                res_remarks = #{resRemarks},
+            </if>
+
+            <if test="resStatus != null">
+                res_status = #{resStatus}
+            </if>
+
+        </set>
+        where
+        res_id = #{resId}
+    </update>
+
+    <select id="findByResIdResident" resultType="com.zzc.community.po.Resident">
+        select * from tb_resident where res_id = #{resId}
+    </select>
+
+
+    <select id="findByResNameAndResPhoneResident" resultType="com.zzc.community.po.Resident">
+         select * from tb_resident where res_name = #{resName} and res_phone = #{resPhone}
+    </select>
+
+    <!-- 批量更新第一种方法，通过接收传进来的参数list进行循环着组装sql -->
+    <update id="upBatchRes">
+        <foreach collection="ids" item="item" index="index" open="" close="" separator=";">
+            update tb_resident
+            set res_status = #{resStatus}
+            where res_id = #{item.value}
+        </foreach>
+    </update>
+
+
+    <delete id="deleteByResIdInt">
+        <foreach collection="ids" item="item" index="index" open="" close="" separator=";">
+            delete from tb_resident
+            where res_id = #{item.value}
+        </foreach>
+    </delete>
+
+</mapper>

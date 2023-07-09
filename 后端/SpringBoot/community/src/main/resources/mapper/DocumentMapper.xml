@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzc.community.mapper.DocumentMapper">
+
+
+    <resultMap id="documentMap" type="com.zzc.community.po.Document">
+        <id column="id" property="id"></id>
+        <result column="old_name" property="oldName"></result>
+        <result column="new_name" property="newName"></result>
+        <result column="md5" property="md5"></result>
+        <result column="status" property="status"></result>
+        <result column="enable" property="enable"></result>
+    </resultMap>
+    <insert id="addDocument" useGeneratedKeys="true">
+        insert into tb_file
+        (old_name,new_name,`type`,`size`,url,md5)
+        values
+        (#{oldName},#{newName},#{type},#{size},#{url},#{md5})
+    </insert>
+
+    <select id="findBymd5" resultMap="documentMap">
+        select * from tb_file where md5 = #{md5}
+    </select>
+
+    <select id="findByNewNameDocument" resultMap="documentMap">
+        select * from tb_file where new_name = #{newName}
+    </select>
+
+    <select id="findAllFile" resultMap="documentMap">
+        select * from tb_file
+        <where>
+            <if test="oldName != null and oldName != ''">
+                old_name = #{oldName}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateEnableInt">
+        update tb_file
+        set  enable =#{enable}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteByIdInt">
+        delete from tb_file where id = #{id}
+    </delete>
+
+
+    <select id="findAllByIdDocument" resultMap="documentMap">
+        select  * from tb_file  where id = #{id}
+    </select>
+
+</mapper>

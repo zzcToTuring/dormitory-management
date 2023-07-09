@@ -1,0 +1,30 @@
+server:
+  port: 10086
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql
+
+
+  servlet:
+    multipart:
+      # 文件上传路径
+      location: ？？？
+
+  redis:
+    host: 127.0.0.1
+    timeout: 5000
+
+#mybatis配置
+mybatis:
+  type-aliases-package: com.zzc.community.po
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true #驼峰命名
+    cache-enabled: true #二级缓存
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#日志打印
+logging:
+  level:
+    com.zzc.community.mapper: debug
+

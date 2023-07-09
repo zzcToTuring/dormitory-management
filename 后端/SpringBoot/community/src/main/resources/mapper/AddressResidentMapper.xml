@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzc.community.mapper.AddressResidentMapper">
+
+
+    <insert id="addResidentAddress">
+        insert into tb_address_resident (address_id,res_id) values (#{addressId},#{resId});
+    </insert>
+
+    <delete id="deleteResidentAddress">
+        delete from tb_address_resident
+        where res_id = #{resId}
+    </delete>
+
+    <select id="selectByresidentId" resultType="com.zzc.community.po.AddressResident">
+        select * from tb_address_resident  where res_id = #{resId}
+    </select>
+</mapper>

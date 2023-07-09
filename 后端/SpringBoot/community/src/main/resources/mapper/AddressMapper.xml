@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzc.community.mapper.AddressMapper">
+
+    <insert id="addAddress" useGeneratedKeys="true" keyColumn="address_id" keyProperty="addressId">
+        insert into tb_address (`name`,house,unit)
+        values (#{name},#{house},#{unit});
+    </insert>
+
+    <update id="addResidentCount">
+        update tb_address set resident_count = resident_count + 1 where `name` = #{name} and house = #{house} and unit = #{unit}
+    </update>
+
+    <update id="deleteResidentCount">
+        update tb_address set resident_count = resident_count - 1 where `name` = #{name} and house = #{house} and unit = #{unit}
+    </update>
+
+    <select id="selectByhouseAndUnit" resultType="com.zzc.community.po.Address">
+        SELECT * FROM tb_address where house = #{house} and unit = #{unit}
+    </select>
+
+
+    <select id="selectAll" resultType="com.zzc.community.po.Address">
+        select * from tb_address
+        <where>
+            <if test=" name != null and name != ''"> `name` = #{name}</if>
+            <if test=" house!= null and house != ''"> and house = #{house}</if>
+            <if test=" unit != null and unit != ''"> and unit = #{unit}</if>
+        </where>
+    </select>
+
+    <select id="findByAddressId" resultType="com.zzc.community.po.Address">
+        select * from tb_address where address_id = #{addressId}
+    </select>
+
+    <select id="selectByhouseAndUnitAndName" resultType="com.zzc.community.po.Address">
+         SELECT * FROM tb_address where `name` = #{name} and house = #{house} and unit = #{unit}
+    </select>
+
+</mapper>
